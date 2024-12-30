@@ -46,7 +46,8 @@ const setUpViews = (app) => {
   });
 
   app.decorateReply('render', function render(viewPath, locals) {
-    this.view(viewPath, { ...locals, reply: this });
+    const currentUser = this.request.user || null;
+    this.view(viewPath, { ...locals, currentUser, reply: this });
   });
 };
 

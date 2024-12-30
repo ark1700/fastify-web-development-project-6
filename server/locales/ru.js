@@ -27,6 +27,8 @@ export default {
         signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выход',
+        editUser: 'Изменить',
+        deleteUser: 'Удалить',
       },
     },
     views: {
@@ -45,6 +47,20 @@ export default {
         new: {
           submit: 'Сохранить',
           signUp: 'Регистрация',
+        },
+        update: {
+          error: 'Не удалось обновить пользователя',
+          success: 'Пользователь обновлён',
+          notFound: 'Пользователь не найден',
+        },
+        delete: {
+          error: 'Не удалось удалить пользователя',
+          success: 'Пользователь удалён',
+          notFound: 'Пользователь не найден',
+        },
+        edit: {
+          edit: 'Изменить',
+          submit: 'Сохранить',
         },
       },
       welcome: {
