@@ -43,7 +43,7 @@ export default (app) => {
       const id = Number(req.params.id);
       const userId = Number(req.user.id);
 
-      if (id !== userId) {
+      if (!userId || id !== userId) {
         req.flash('error', i18next.t('flash.authError'));
         reply.redirect(app.reverse('root'));
         return reply;
@@ -68,10 +68,10 @@ export default (app) => {
       return reply;
     })
     .delete('/users/:id', { name: 'deleteUser' }, async (req, reply) => {
-      const id = Number(req.params.id);
-      const userId = Number(req.user.id);
+      const id = Number(req?.params?.id);
+      const userId = Number(req?.user?.id);
 
-      if (id !== userId) {
+      if (!userId || id !== userId) {
         req.flash('error', i18next.t('flash.authError'));
         reply.redirect(app.reverse('root'));
         return reply;

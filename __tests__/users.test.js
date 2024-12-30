@@ -70,10 +70,92 @@ describe('test users CRUD', () => {
     expect(user).toMatchObject(expected);
   });
 
+  it('edit', async () => {
+    const user = testData.users.existing;
+    const responseSignIn = await app.inject({
+      method: 'POST',
+      url: app.reverse('session'),
+      payload: {
+        data: user,
+      },
+    });
+    const [sessionCookie] = responseSignIn.cookies;
+    const { name, value } = sessionCookie;
+    const cookie = { [name]: value };
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('editUser', { id: user.id }),
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('update', async () => {
+    const user = testData.users.existing;
+    const newFirstName = 'newFirstName';
+    const responseSignIn = await app.inject({
+      method: 'POST',
+      url: app.reverse('session'),
+      payload: {
+        data: user,
+      },
+    });
+    const [sessionCookie] = responseSignIn.cookies;
+    const { name, value } = sessionCookie;
+    const cookie = { [name]: value };
+    const response = await app.inject({
+      method: 'PATCH',
+      url: app.reverse('updateUser', { id: user.id }),
+      cookies: cookie,
+      payload: {
+        data: {
+          firstName: newFirstName,
+        },
+      },
+    });
+
+    expect(response.statusCode).toBe(302);
+    expect(response.headers.location).toBe(app.reverse('users'));
+    const expected = {
+      ..._.omit(user, 'password'),
+      passwordDigest: encrypt(user.password),
+    };
+    const updatedUser = await models.user.query().findOne({ email: user.email });
+    expected.firstName = newFirstName;
+    expect(updatedUser).toMatchObject(expected);
+  });
+
+  it('delete', async () => {
+    const user = testData.users.existing;
+    const responseSignIn = await app.inject({
+      method: 'POST',
+      url: app.reverse('session'),
+      payload: {
+        data: user,
+      },
+    });
+    const [sessionCookie] = responseSignIn.cookies;
+    const { name, value } = sessionCookie;
+    const cookie = { [name]: value };
+
+    const response = await app.inject({
+      method: 'DELETE',
+      url: app.reverse('deleteUser', { id: user.id }),
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+    expect(response.headers.location).toBe('/');
+
+    const deletedUser = await app.objection.models.user.query().findById(user.id);
+    expect(deletedUser).toBeUndefined();
+  });
+
   afterEach(async () => {
     // Пока Segmentation fault: 11
     // после каждого теста откатываем миграции
-    // await knex.migrate.rollback();
+    await knex.migrate.rollback();
   });
 
   afterAll(async () => {
