@@ -21,9 +21,7 @@ html(lang="en")
           ul.navbar-nav
             if isAuthenticated()
               li.nav-item
-                +buttonTo(route('deleteUser', { id: currentUser.id.toString() }), 'delete')(class="btn nav-link" value=t('layouts.application.deleteUser'))
-              li.nav-item
-                a.nav-link(href=route('editUser', { id: currentUser.id.toString() }))= t('layouts.application.editUser')
+                a.nav-link(href=route('statuses'))= t('layouts.application.statuses')
               li.nav-item
                 +buttonTo(route('session'), 'delete')(class="btn nav-link" value=t('layouts.application.signOut'))
             else

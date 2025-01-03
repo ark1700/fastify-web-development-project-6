@@ -29,16 +29,33 @@ export default {
           notFound: 'User not found',
         },
       },
+      statuses: {
+        create: {
+          error: 'Failed to create status',
+          success: 'Status created successfully',
+        },
+        update: {
+          error: 'Failed to update status',
+          success: 'Status updated',
+          notFound: 'Status not found',
+        },
+        delete: {
+          error: 'Failed to delete status',
+          success: 'Status deleted',
+          notFound: 'Status not found',
+        },
+      },
       authError: 'Access denied! Please login',
     },
     layouts: {
       application: {
         users: 'Users',
+        statuses: 'Statuses',
         signIn: 'Login',
         signUp: 'Register',
         signOut: 'Logout',
-        editUser: 'Edit',
-        deleteUser: 'Delete',
+        edit: 'Edit',
+        delete: 'Delete',
       },
     },
     views: {
@@ -60,6 +77,20 @@ export default {
         },
         edit: {
           edit: 'Edit',
+          submit: 'Save',
+        },
+      },
+      statuses: {
+        id: 'ID',
+        name: 'Name',
+        createdAt: 'Created at',
+        statuses: 'Statuses',
+        new: {
+          createStatus: 'Create status',
+          submit: 'Create',
+        },
+        edit: {
+          editStatus: 'Edit status',
           submit: 'Save',
         },
       },

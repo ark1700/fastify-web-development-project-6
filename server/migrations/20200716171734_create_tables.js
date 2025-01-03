@@ -10,6 +10,16 @@ export const up = (knex) => (
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
   })
+  .createTable('statuses', (table) => {
+    table.increments('id').primary();
+    table.string('name').notNullable().unique();
+    table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at').defaultTo(knex.fn.now());
+  })
 );
 
-export const down = (knex) => knex.schema.dropTable('users');
+export const down = (knex) => (
+  knex.schema
+    .dropTable('statuses')
+    .dropTable('users')
+);
