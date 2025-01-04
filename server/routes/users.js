@@ -70,6 +70,8 @@ export default (app) => {
     .delete('/users/:id', { name: 'deleteUser' }, async (req, reply) => {
       const id = Number(req?.params?.id);
       const userId = Number(req?.user?.id);
+      let taskList;
+      let taskList2;
 
       if (!userId || id !== userId) {
         req.flash('error', i18next.t('flash.authError'));
@@ -78,22 +80,35 @@ export default (app) => {
       }
 
       try {
-        const user = await app.objection.models.user.query().findById(id);
+        const user = await app.objection.models.user.query().findById(id).withGraphFetched('[executorForTasks, createdTasks]');
+        taskList = user.executorForTasks;
+        taskList2 = user.createdTasks;
         if (!user) {
           req.flash('error', i18next.t('flash.users.delete.notFound'));
-          reply.redirect(app.reverse('root'));
+          reply.redirect(app.reverse('users'));
+          return reply;
+        }
+
+        if (user.executorForTasks.length > 0 || user.createdTasks.length > 0) {
+          req.flash('error', i18next.t('flash.users.delete.hasTasks'));
+          reply.redirect(app.reverse('users'));
           return reply;
         }
 
         await user.$query().delete();
         req.logOut();
         req.flash('info', i18next.t('flash.users.delete.success'));
-        reply.redirect(app.reverse('root'));
+        reply.redirect(app.reverse('users'));
         return reply;
 
-      } catch ({ data }) {
-        req.flash('error', i18next.t('flash.users.update.error'));
-        reply.render('users/edit', { user: req.body.data, errors: data });
+      } catch (data) {
+        // req.flash('error', i18next.t('flash.users.delete.error'));
+        req.flash('error', JSON.stringify({
+          taskList,
+          taskList2,
+        }));
+        reply.redirect(app.reverse('users'));
+        return reply;
       }
     });
 };

@@ -1,0 +1,20 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.tasks.new.createTask')
+
+block content
+  +formFor()(action=route('tasks') method='post')
+    +input(task, 'name', errors)(type="text")
+    +input(task, 'description', errors)(type="text")
+    if statuses
+      +select(task, 'statusId', t('views.tasks.selectStatus'), errors)
+        each status, index in statuses
+          option(value=status.id, selected=index===0)= status.name
+    if users
+      +select(task, 'executorId', t('views.tasks.selectExecutor'), errors)
+        option(value='')= t('views.tasks.noExecutor')
+        each user in users
+          option(value=user.id)= `${user.firstName} ${user.lastName}`
+
+    +submit(task)(value=t('views.tasks.new.submit'))

@@ -27,6 +27,7 @@ export default {
           error: 'Failed to delete user',
           success: 'User deleted',
           notFound: 'User not found',
+          hasTasks: 'User has tasks',
         },
       },
       statuses: {
@@ -43,6 +44,7 @@ export default {
           error: 'Failed to delete status',
           success: 'Status deleted',
           notFound: 'Status not found',
+          hasTasks: 'Status has tasks',
         },
       },
       authError: 'Access denied! Please login',
@@ -56,6 +58,7 @@ export default {
         signOut: 'Logout',
         edit: 'Edit',
         delete: 'Delete',
+        tasks: 'Tasks',
       },
     },
     views: {
@@ -91,6 +94,27 @@ export default {
         },
         edit: {
           editStatus: 'Edit status',
+          submit: 'Save',
+        },
+      },
+      tasks: {
+        id: 'ID',
+        name: 'Name',
+        description: 'Description',
+        status: 'Status',
+        creator: 'Creator',
+        executor: 'Executor',
+        createdAt: 'Created at',
+        tasks: 'Tasks',
+        noExecutor: 'No executor',
+        selectExecutor: 'Select executor',
+        selectStatus: 'Select status',
+        new: {
+          createTask: 'Create task',
+          submit: 'Create',
+        },
+        edit: {
+          editTask: 'Edit task',
           submit: 'Save',
         },
       },

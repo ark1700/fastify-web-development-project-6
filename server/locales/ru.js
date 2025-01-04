@@ -27,6 +27,7 @@ export default {
           error: 'Не удалось удалить пользователя',
           success: 'Пользователь удалён',
           notFound: 'Пользователь не найден',
+          hasTasks: 'Пользователь имеет задачи',
         },
       },
       statuses: {
@@ -43,6 +44,7 @@ export default {
           error: 'Не удалось удалить статус',
           success: 'Статус удалён',
           notFound: 'Статус не найден',
+          hasTasks: 'Статус имеет задачи',
         },
       },
       authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
@@ -55,6 +57,7 @@ export default {
         signOut: 'Выход',
         edit: 'Изменить',
         delete: 'Удалить',
+        tasks: 'Задачи',
       },
     },
     views: {
@@ -89,6 +92,27 @@ export default {
         },
         edit: {
           editStatus: 'Изменить статус',
+          submit: 'Сохранить',
+        },
+      },
+      tasks: {
+        id: 'ID',
+        name: 'Имя',
+        description: 'Описание',
+        status: 'Статус',
+        creator: 'Создатель',
+        executor: 'Исполнитель',
+        createdAt: 'Дата создания',
+        tasks: 'Задачи',
+        noExecutor: 'Нет исполнителя',
+        selectExecutor: 'Выберите исполнителя',
+        selectStatus: 'Выберите статус',
+        new: {
+          createTask: 'Создать задачу',
+          submit: 'Создать',
+        },
+        edit: {
+          editTask: 'Изменить задачу',
           submit: 'Сохранить',
         },
       },

@@ -1,0 +1,21 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.tasks.edit.editTask')
+
+block content
+  +formFor()(action=route('updateTask', { id: task.id }) method='post')
+    input(type="hidden", name="_method", value="patch")
+    +input(_, 'name', errors)(type="text", value=task.name)
+    +input(_, 'description', errors)(type="text", value=task.description)
+    if statuses
+      +select(_, 'statusId', t('views.tasks.selectStatus'), errors)
+        each status, index in statuses
+          option(value=status.id, selected=index===task.statusId)= status.name
+    if users
+      +select(_, 'executorId', t('views.tasks.selectExecutor'), errors)
+        option(value='')= t('views.tasks.noExecutor')
+        each user, index in users
+          option(value=user.id, selected=user.id===task.executorId)= `${user.firstName} ${user.lastName}`
+
+    +submit()(value=t('views.tasks.edit.submit'))

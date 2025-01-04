@@ -1,0 +1,33 @@
+extends ../layouts/application.pug
+
+block header
+  h1= t('views.tasks.tasks')
+  a.btn.btn-primary(href=(route('newTask')))= t('views.tasks.new.createTask')
+
+block content
+  table.table.table-striped
+    thead
+      tr
+        th= t('views.tasks.id')
+        th= t('views.tasks.name')
+        th= t('views.tasks.description')
+        th= t('views.tasks.status')
+        th= t('views.tasks.creator')
+        th= t('views.tasks.executor')
+        th= t('views.tasks.createdAt')
+        th
+        th
+    tbody
+      each task in tasks
+        tr
+          td= task.id
+          td= task.name
+          td= task.description
+          td= task.status.name
+          td= `${task.creator.firstName} ${task.creator.lastName}`
+          td= `${task.executor ? `${task.executor.firstName} ${task.executor.lastName}` : ''}`
+          td= formatDate(task.createdAt)
+          td
+            a.btn.btn-primary(href=route('editTask', { id: task.id.toString() }))= t('layouts.application.edit')
+          td
+            +buttonTo(route('deleteTask', { id: task.id.toString() }), 'delete')(class="btn btn-danger" value=t('layouts.application.delete'))

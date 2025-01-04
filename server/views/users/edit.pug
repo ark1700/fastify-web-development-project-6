@@ -6,8 +6,8 @@ block header
 block content
   +formFor()(action=route('updateUser', { id: currentUser.id.toString() }) method='post')
     input(type="hidden", name="_method", value="patch")
-    +input(signInForm, 'firstName', errors)(type="text", value=currentUser.firstName)
-    +input(signInForm, 'lastName', errors)(type="text", value=currentUser.lastName)
-    +input(signInForm, 'email', errors)(type="email", value=currentUser.email)
-    +input(signInForm, 'password', errors)(type="password")
-    +submit(signInForm)(value=t('views.users.edit.submit'))
+    +input(_, 'firstName', errors)(type="text", value=currentUser.firstName)
+    +input(_, 'lastName', errors)(type="text", value=currentUser.lastName)
+    +input(_, 'email', errors)(type="email", value=currentUser.email)
+    +input(_, 'password', errors)(type="password")
+    +submit()(value=t('views.users.edit.submit'))

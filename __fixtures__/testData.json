@@ -22,5 +22,21 @@
       "id": 3,
       "name": "done"
     }
+  },
+  "tasks": {
+    "new": {
+      "name": "Task new",
+      "description": "Task description",
+      "statusId": 1,
+      "executorId": 1
+    },
+    "existing": {
+      "id": 1,
+      "name": "Task 1",
+      "description": "",
+      "creatorId": 2,
+      "statusId": 1,
+      "executorId": null
+    }
   }
 }
