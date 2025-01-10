@@ -26,6 +26,17 @@ export const up = (knex) => (
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
   })
+  .createTable('labels', (table) => {
+    table.increments('id').primary();
+    table.string('name').notNullable();
+    table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at').defaultTo(knex.fn.now());
+  })
+  .createTable('tasks_labels', (table) => {
+    table.increments('id').primary();
+    table.integer('label_id');
+    table.integer('task_id');
+  })
 );
 
 export const down = (knex) => (
@@ -33,4 +44,5 @@ export const down = (knex) => (
     .dropTable('statuses')
     .dropTable('users')
     .dropTable('tasks')
+    .dropTable('labels')
 );

@@ -1,0 +1,10 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.labels.edit.editLabel')
+
+block content
+  +formFor()(action=route('updateLabel', { id: label.id.toString() }) method='post')
+    input(type="hidden", name="_method", value="patch")
+    +input(labels, 'name', errors)(type="text", value=label.name)
+    +submit(labels)(value=t('views.labels.edit.submit'))

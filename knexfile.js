@@ -15,22 +15,22 @@ export const development = {
     filename: path.resolve(__dirname, 'database.sqlite'),
   },
   useNullAsDefault: true,
-  debug: true,
+  // debug: true,
   migrations,
-  log: {
-    warn(message) {
-      console.warn('Knex Warning:', message);
-    },
-    error(message) {
-      console.error('Knex Error:', message);
-    },
-    deprecate(message) {
-      console.log('Knex Deprecation Warning:', message);
-    },
-    debug(message) {
-      console.log('Knex Debug:', message);
-    },
-  },
+  // log: {
+  //   warn(message) {
+  //     console.warn('Knex Warning:', message);
+  //   },
+  //   error(message) {
+  //     console.error('Knex Error:', message);
+  //   },
+  //   deprecate(message) {
+  //     console.log('Knex Deprecation Warning:', message);
+  //   },
+  //   debug(message) {
+  //     console.log('Knex Debug:', message);
+  //   },
+  // },
 };
 
 export const test = {

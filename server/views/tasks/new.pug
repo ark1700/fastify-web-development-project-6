@@ -11,6 +11,10 @@ block content
       +select(task, 'statusId', t('views.tasks.selectStatus'), errors)
         each status, index in statuses
           option(value=status.id, selected=index===0)= status.name
+    if labels
+      +select(task, 'labelIds', t('views.tasks.selectLabels'), errors)(multiple)
+        each label, index in labels
+          option(value=label.id)= label.name
     if users
       +select(task, 'executorId', t('views.tasks.selectExecutor'), errors)
         option(value='')= t('views.tasks.noExecutor')
