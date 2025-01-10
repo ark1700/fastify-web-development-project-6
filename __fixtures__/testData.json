@@ -23,6 +23,15 @@
       "name": "done"
     }
   },
+  "labels": {
+    "new": {
+      "name": "completed"
+    },
+    "existing": {
+      "id": 3,
+      "name": "Waiting"
+    }
+  },
   "tasks": {
     "new": {
       "name": "Task new",
