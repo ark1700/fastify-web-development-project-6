@@ -2,7 +2,7 @@
 
 export default {
   translation: {
-    appName: 'Fastify Boilerplate',
+    appName: 'Task manager',
     flash: {
       session: {
         create: {
@@ -105,9 +105,10 @@ export default {
       users: {
         id: 'ID',
         email: 'Email',
-        firstName: 'First name',
-        lastName: 'Last name',
+        fullName: 'Full name',
         createdAt: 'Created at',
+        actions: 'Actions',
+        users: 'Users',
         new: {
           submit: 'Register',
           signUp: 'Register',
@@ -122,6 +123,7 @@ export default {
         name: 'Name',
         createdAt: 'Created at',
         statuses: 'Statuses',
+        actions: 'Actions',
         new: {
           createStatus: 'Create status',
           submit: 'Create',
@@ -144,6 +146,10 @@ export default {
         noExecutor: 'No executor',
         selectExecutor: 'Select executor',
         selectStatus: 'Select status',
+        selectLabel: 'Select label',
+        actions: 'Actions',
+        onlyMyTasks: 'Only my tasks',
+        show: 'Show',
         new: {
           createTask: 'Create task',
           submit: 'Create',
@@ -158,6 +164,7 @@ export default {
         name: 'Name',
         createdAt: 'Created at',
         labels: 'Labels',
+        actions: 'Actions',
         new: {
           createLabel: 'Create label',
           submit: 'Create',
@@ -169,9 +176,8 @@ export default {
       },
       welcome: {
         index: {
-          hello: 'Hello from Hexlet!',
-          description: 'Online programming school',
-          more: 'Learn more',
+          hello: 'Welcome to the Task Manager',
+          description: 'Manage your tasks efficiently and effectively',
         },
       },
     },

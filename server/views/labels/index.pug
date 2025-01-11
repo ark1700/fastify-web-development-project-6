@@ -1,18 +1,17 @@
 extends ../layouts/application.pug
 
 block header
-  h1= t('views.labels.labels')
-  a.btn.btn-primary(href=(route('newLabel')))= t('views.labels.new.createLabel')
+  = t('views.labels.labels')
 
 block content
+  a.btn.btn-primary.mb-3(href=(route('newLabel')))= t('views.labels.new.createLabel')
   table.table.table-striped
     thead
       tr
         th= t('views.labels.id')
         th= t('views.labels.name')
         th= t('views.labels.createdAt')
-        th
-        th
+        th= t('views.labels.actions')
     tbody
       each label in labels
         tr
@@ -20,6 +19,6 @@ block content
           td= label.name
           td= formatDate(label.createdAt)
           td
-            a.btn.btn-primary(href=route('editLabel', { id: label.id.toString() }))= t('layouts.application.edit')
-          td
-            +buttonTo(route('deleteLabel', { id: label.id.toString() }), 'delete')(value=t('layouts.application.delete')).btn.btn-danger
+            .d-flex.gap-2
+              a.btn.btn-primary(href=route('editLabel', { id: label.id.toString() }))= t('layouts.application.edit')
+              +buttonTo(route('deleteLabel', { id: label.id.toString() }), 'delete')(value=t('layouts.application.delete')).btn.btn-danger

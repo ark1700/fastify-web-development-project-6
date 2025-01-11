@@ -44,3 +44,31 @@ mixin select(entity = null, propertyName, label, errors = {})
       class=classLine
     )&attributes(attributes)
       block
+mixin group-select(entity = null, propertyName, label, errors = {})
+  - propertyErrors = _.get(errors, propertyName)
+  - classLine = 'form-select' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
+  - inputId = getInputId(propertyName)
+  .input-group.mb-3(class=(errors[propertyName] && 'has-danger'))
+    label(
+      for= inputId
+    ).input-group-text= label
+    select(
+      id= inputId
+      name=getInputName(propertyName)
+      class=classLine
+    )&attributes(attributes).form-select
+      block
+mixin checkbox(entity = null, propertyName, label, errors = {})
+  - propertyErrors = _.get(errors, propertyName)
+  - classLine = 'form-check-input' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
+  - inputId = getInputId(propertyName)
+  .mb-3.form-check
+    input(
+      id= inputId
+      name=getInputName(propertyName)
+      class=classLine
+      type="checkbox"
+    )
+    label(
+      for= inputId
+    ).form-check-label= label

@@ -12,7 +12,7 @@ block content
         each status, index in statuses
           option(value=status.id, selected=index===0)= status.name
     if labels
-      +select(task, 'labelIds', t('views.tasks.selectLabels'), errors)(multiple)
+      +select(task, 'labelIds', t('views.tasks.selectLabel'), errors)(multiple)
         each label, index in labels
           option(value=label.id)= label.name
     if users

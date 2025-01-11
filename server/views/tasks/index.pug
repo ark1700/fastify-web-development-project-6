@@ -1,35 +1,58 @@
 extends ../layouts/application.pug
 
 block header
-  h1= t('views.tasks.tasks')
-  a.btn.btn-primary(href=(route('newTask')))= t('views.tasks.new.createTask')
+  = t('views.tasks.tasks')
 
 block content
-  table.table.table-striped
-    thead
-      tr
-        th= t('views.tasks.id')
-        th= t('views.tasks.name')
-        th= t('views.tasks.description')
-        th= t('views.tasks.status')
-        th= t('views.tasks.labels')
-        th= t('views.tasks.creator')
-        th= t('views.tasks.executor')
-        th= t('views.tasks.createdAt')
-        th
-        th
-    tbody
-      each task in tasks
+  a.btn.btn-primary.mb-3(href=(route('newTask')))= t('views.tasks.new.createTask')
+  .card.shadow-sm.mb-4
+    .card-body.p-4
+      +formFor()(action=route('tasks') method='post')
+        .row
+          .col-12.col-md
+            if labels
+              +group-select(__, 'statusId', t('views.tasks.selectStatus'), errors)
+                option(value='')
+                each status, index in statuses || []
+                  option(value=status.id, selected=index===0)= status.name
+          .col-12.col-md
+            if users
+              +group-select(__, 'executorId', t('views.tasks.selectExecutor'), errors)
+                option(value='')
+                each user in users || []
+                  option(value=user.id)= `${user.firstName} ${user.lastName}`
+          .col-12.col-md
+            if labels
+              +group-select(__, 'labelIds', t('views.tasks.selectLabel'), errors)
+                option(value='')
+                each label, index in labels || []
+                  option(value=label.id)= label.name
+        +checkbox(__, 'isCreatorUser', t('views.tasks.onlyMyTasks'), errors)
+        +submit(__)(value=t('views.tasks.show'))
+
+  .overflow-auto
+    table.table.table-striped
+      thead
         tr
-          td= task.id
-          td= task.name
-          td= task.description
-          td= task.status.name
-          td= task.labels.map(label => label.name).join(', ')
-          td= `${task.creator.firstName} ${task.creator.lastName}`
-          td= `${task.executor ? `${task.executor.firstName} ${task.executor.lastName}` : ''}`
-          td= formatDate(task.createdAt)
-          td
-            a.btn.btn-primary(href=route('editTask', { id: task.id.toString() }))= t('layouts.application.edit')
-          td
-            +buttonTo(route('deleteTask', { id: task.id.toString() }), 'delete')(class="btn btn-danger" value=t('layouts.application.delete'))
+          th= t('views.tasks.id')
+          th= t('views.tasks.name')
+          th= t('views.tasks.status')
+          th= t('views.tasks.labels')
+          th= t('views.tasks.creator')
+          th= t('views.tasks.executor')
+          th= t('views.tasks.createdAt')
+          th= t('views.tasks.actions')
+      tbody
+        each task in tasks
+          tr
+            td= task.id
+            td= task.name
+            td= task.status.name
+            td= task.labels.map(label => label.name).join(', ')
+            td= `${task.creator.firstName} ${task.creator.lastName}`
+            td= `${task.executor ? `${task.executor.firstName} ${task.executor.lastName}` : ''}`
+            td= formatDate(task.createdAt)
+            td
+              .d-flex.gap-2
+                a.btn.btn-primary(href=route('editTask', { id: task.id.toString() }))= t('layouts.application.edit')
+                +buttonTo(route('deleteTask', { id: task.id.toString() }), 'delete')(class="btn btn-danger" value=t('layouts.application.delete'))

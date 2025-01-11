@@ -1,18 +1,17 @@
 extends ../layouts/application.pug
 
 block header
-  h1= t('views.statuses.statuses')
-  a.btn.btn-primary(href=(route('newStatus')))= t('views.statuses.new.createStatus')
+  = t('views.statuses.statuses')
 
 block content
+  a.btn.btn-primary.mb-3(href=(route('newStatus')))= t('views.statuses.new.createStatus')
   table.table.table-striped
     thead
       tr
         th= t('views.statuses.id')
         th= t('views.statuses.name')
         th= t('views.statuses.createdAt')
-        th
-        th
+        th= t('views.statuses.actions')
     tbody
       each status in statuses
         tr
@@ -20,6 +19,6 @@ block content
           td= status.name
           td= formatDate(status.createdAt)
           td
-            a.btn.btn-primary(href=route('editStatus', { id: status.id.toString() }))= t('layouts.application.edit')
-          td
-            +buttonTo(route('deleteStatus', { id: status.id.toString() }), 'delete')(value=t('layouts.application.delete')).btn.btn-danger
+            .d-flex.gap-2
+              a.btn.btn-primary(href=route('editStatus', { id: status.id.toString() }))= t('layouts.application.edit')
+              +buttonTo(route('deleteStatus', { id: status.id.toString() }), 'delete')(value=t('layouts.application.delete')).btn.btn-danger

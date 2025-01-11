@@ -1,25 +1,25 @@
 extends ../layouts/application.pug
 
+block header
+  = t('views.users.users')
+
 block content
   table.table.table-striped
     thead
       tr
         th= t('views.users.id')
         th= t('views.users.email')
-        th= t('views.users.firstName')
-        th= t('views.users.lastName')
+        th= t('views.users.fullName')
         th= t('views.users.createdAt')
-        th
-        th
+        th= t('views.users.actions')
     tbody
       each user in users
         tr
           td= user.id
           td= user.email
-          td= user.firstName
-          td= user.lastName
+          td= `${user.firstName} ${user.lastName}`
           td= formatDate(user.createdAt)
           td
-            a.btn.btn-primary(href=route('editUser', { id: user.id.toString() }))= t('layouts.application.edit')
-          td
-            +buttonTo(route('deleteUser', { id: user.id.toString() }), 'delete')(class="btn btn-danger" value=t('layouts.application.delete'))
+            .d-flex.gap-2
+              a.btn.btn-primary(href=route('editUser', { id: user.id.toString() }))= t('layouts.application.edit')
+              +buttonTo(route('deleteUser', { id: user.id.toString() }), 'delete')(class="btn btn-danger" value=t('layouts.application.delete'))
