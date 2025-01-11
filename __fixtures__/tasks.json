@@ -9,15 +9,16 @@
   {
     "name": "Task 2",
     "description": "",
-    "creatorId": 2,
+    "creatorId": 1,
     "statusId": 2,
-    "executorId": 2
+    "executorId": 3
   },
   {
     "name": "Task 3",
     "description": "Description about task",
     "creatorId": 3,
-    "statusId": 3,
-    "executorId": null
+    "statusId": 1,
+    "executorId": null,
+    "labelsId": [1, 2]
   }
 ]

@@ -146,7 +146,7 @@ describe('test users CRUD', () => {
     });
 
     expect(response.statusCode).toBe(302);
-    expect(response.headers.location).toBe('/');
+    expect(response.headers.location).toBe('/users');
 
     const deletedUser = await app.objection.models.user.query().findById(user.id);
     expect(deletedUser).toBeUndefined();
