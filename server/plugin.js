@@ -25,11 +25,18 @@ import getHelpers from './helpers/index.js';
 import * as knexConfig from '../knexfile.js';
 import models from './models/index.js';
 import FormStrategy from './lib/passportStrategies/FormStrategy.js';
+import Rollbar from 'rollbar';
 
 const __dirname = fileURLToPath(path.dirname(import.meta.url));
 
 const mode = process.env.NODE_ENV || 'development';
 // const isDevelopment = mode === 'development';
+
+const rollbar = new Rollbar({
+  accessToken: process.env.ROLLBAR_TOKEN,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
 
 const setUpViews = (app) => {
   const helpers = getHelpers(app);
@@ -116,6 +123,16 @@ const registerPlugins = async (app) => {
   });
 };
 
+const addRollbarErrorHandler = (app) => {
+  app.setErrorHandler((error, request, reply) => {
+    rollbar.error(error);
+    reply.status(500).send(error);
+  });
+  app.get('/trigger-error', async (req, reply) => {
+    throw new Error('This is a test error for Rollbar');
+  });
+};
+
 export const options = {
   exposeHeadRoutes: false,
 };
@@ -129,6 +146,7 @@ export default async (app, _options) => {
   setUpStaticAssets(app);
   addRoutes(app);
   addHooks(app);
+  addRollbarErrorHandler(app);
 
   return app;
 };
