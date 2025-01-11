@@ -68,7 +68,7 @@ mixin checkbox(entity = null, propertyName, label, errors = {})
       name=getInputName(propertyName)
       class=classLine
       type="checkbox"
-    )
+    )&attributes(attributes)
     label(
       for= inputId
     ).form-check-label= label

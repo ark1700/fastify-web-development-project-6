@@ -2,15 +2,45 @@
 
 import i18next from 'i18next';
 
+const queryDataParse = (data) => {
+  return Object.keys(data).reduce((acc, key) => {
+    const newKey = key.replace('data[', '').replace(']', '');
+    acc.data[newKey] = data[key];
+    return acc;
+  }, { data: {} })
+}
+
 export default (app) => {
   const { models } = app.objection;
   app
     .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
-      const tasks = await models.task.query().withGraphJoined('[creator, status, executor, labels]');
+      const { data } = queryDataParse(req.query);
+      const {statusId, executorId, labelId, isCreatorUser } = data;
+      console.log('=============================');
+      console.log(statusId);
+      console.log('=============================');
+      const query = models.task
+        .query()
+        .withGraphJoined('[creator, status, executor, labels]')
+      if (statusId) {
+        query.where('statusId', statusId);
+      }
+      if (executorId) {
+        query.where('executorId', executorId);
+      }
+      if (labelId) {
+        query.whereExists(
+          models.task.relatedQuery('labels').where('labels.id', labelId)
+        );
+      }
+      if (isCreatorUser === 'on') {
+        query.where('creatorId', req.user.id);
+      }
+      const tasks = await query;
       const statuses = await models.status.query();
       const users = await models.user.query().select('id', 'firstName', 'lastName');
       const labels = await models.label.query();
-      reply.render('tasks/index', { tasks, statuses, users, labels });
+      reply.render('tasks/index', { tasks, statuses, users, labels, filter: data });
       return reply;
     })
     .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {

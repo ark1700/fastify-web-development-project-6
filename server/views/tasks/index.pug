@@ -7,27 +7,27 @@ block content
   a.btn.btn-primary.mb-3(href=(route('newTask')))= t('views.tasks.new.createTask')
   .card.shadow-sm.mb-4
     .card-body.p-4
-      +formFor()(action=route('tasks') method='post')
+      +formFor()(action=route('tasks') method='get')
         .row
           .col-12.col-md
             if labels
               +group-select(__, 'statusId', t('views.tasks.selectStatus'), errors)
                 option(value='')
-                each status, index in statuses || []
-                  option(value=status.id, selected=index===0)= status.name
+                each status in statuses || []
+                  option(value=status.id, selected=filter.statusId===status.id.toString())= status.name
           .col-12.col-md
             if users
               +group-select(__, 'executorId', t('views.tasks.selectExecutor'), errors)
                 option(value='')
                 each user in users || []
-                  option(value=user.id)= `${user.firstName} ${user.lastName}`
+                  option(value=user.id, selected=filter.executorId===user.id.toString())= `${user.firstName} ${user.lastName}`
           .col-12.col-md
             if labels
-              +group-select(__, 'labelIds', t('views.tasks.selectLabel'), errors)
+              +group-select(__, 'labelId', t('views.tasks.selectLabel'), errors)
                 option(value='')
-                each label, index in labels || []
-                  option(value=label.id)= label.name
-        +checkbox(__, 'isCreatorUser', t('views.tasks.onlyMyTasks'), errors)
+                each label in labels || []
+                  option(value=label.id, selected=filter.labelId===label.id.toString())= label.name
+        +checkbox(__, 'isCreatorUser', t('views.tasks.onlyMyTasks'), errors)(checked=filter.isCreatorUser==='on')
         +submit(__)(value=t('views.tasks.show'))
 
   .overflow-auto
