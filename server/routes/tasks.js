@@ -1,19 +1,19 @@
 // @ts-check
 
 import i18next from 'i18next';
-import { isAuthenticated } from './utils/helpers.js';
 
 export default (app) => {
   const { models } = app.objection;
   app
-    .get('/tasks', { name: 'tasks' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .get('/tasks', { name: 'tasks', preValidation: app.authenticate }, async (req, reply) => {
       const tasks = await models.task.query().withGraphJoined('[creator, status, executor, labels]');
-      reply.render('tasks/index', { tasks });
+      const statuses = await models.status.query();
+      const users = await models.user.query().select('id', 'firstName', 'lastName');
+      const labels = await models.label.query();
+      reply.render('tasks/index', { tasks, statuses, users, labels });
       return reply;
     })
-    .get('/tasks/new', { name: 'newTask' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .get('/tasks/new', { name: 'newTask', preValidation: app.authenticate }, async (req, reply) => {
       const statuses = await models.status.query();
       const task = new models.task();
       const users = await models.user.query().select('id', 'firstName', 'lastName');
@@ -21,8 +21,7 @@ export default (app) => {
       reply.render('tasks/new', { task, statuses, users, labels });
       return reply;
     })
-    .get('/tasks/:id/edit', { name: 'editTask' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .get('/tasks/:id/edit', { name: 'editTask', preValidation: app.authenticate }, async (req, reply) => {
       const task = await models.task.query().findById(req.params.id).withGraphJoined('[creator, status, executor, labels]');
       const statuses = await models.status.query();
       const users = await models.user.query().select('id', 'firstName', 'lastName');
@@ -35,9 +34,7 @@ export default (app) => {
       reply.render('tasks/edit', { task, statuses, users, labels });
       return reply;
     })
-    .post('/tasks', async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
-
+    .post('/tasks', { name: 'createTask', preValidation: app.authenticate }, async (req, reply) => {
       try {
         const task = new models.task();
         const {statusId, executorId, labelIds, ...data} = req.body.data
@@ -72,8 +69,7 @@ export default (app) => {
 
       return reply;
     })
-    .patch('/tasks/:id', { name: 'updateTask' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .patch('/tasks/:id', { name: 'updateTask', preValidation: app.authenticate }, async (req, reply) => {
       const id = Number(req.params.id);
 
       try {
@@ -115,8 +111,7 @@ export default (app) => {
 
       return reply;
     })
-    .delete('/tasks/:id', { name: 'deleteTask' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .delete('/tasks/:id', { name: 'deleteTask', preValidation: app.authenticate }, async (req, reply) => {
       const id = Number(req.params.id);
 
       try {

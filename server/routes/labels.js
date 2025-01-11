@@ -1,23 +1,19 @@
 // @ts-check
 
 import i18next from 'i18next';
-import { isAuthenticated } from './utils/helpers.js';
 
 export default (app) => {
   app
-    .get('/labels', { name: 'labels' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .get('/labels', { name: 'labels', preValidation: app.authenticate }, async (req, reply) => {
       const labels = await app.objection.models.label.query();
       reply.render('labels/index', { labels });
       return reply;
     })
-    .get('/labels/new', { name: 'newLabel' }, (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .get('/labels/new', { name: 'newLabel', preValidation: app.authenticate }, (req, reply) => {
       const label = new app.objection.models.label();
       reply.render('labels/new', { label });
     })
-    .get('/labels/:id/edit', { name: 'editLabel' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .get('/labels/:id/edit', { name: 'editLabel', preValidation: app.authenticate }, async (req, reply) => {
       const label = await app.objection.models.label.query().findById(req.params.id);
       if (!label) {
         req.flash('error', i18next.t('flash.labels.notFound'));
@@ -27,8 +23,7 @@ export default (app) => {
       reply.render('labels/edit', { label });
       return reply;
     })
-    .post('/labels', async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .post('/labels', { name: 'createLabel', preValidation: app.authenticate }, async (req, reply) => {
       const label = new app.objection.models.label();
       label.$set(req.body.data);
 
@@ -44,8 +39,7 @@ export default (app) => {
 
       return reply;
     })
-    .patch('/labels/:id', { name: 'updateLabel' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .patch('/labels/:id', { name: 'updateLabel', preValidation: app.authenticate }, async (req, reply) => {
       const id = Number(req.params.id);
 
       try {
@@ -66,23 +60,22 @@ export default (app) => {
 
       return reply;
     })
-    .delete('/labels/:id', { name: 'deleteLabel' }, async (req, reply) => {
-      if (!isAuthenticated(req, reply)) return reply;
+    .delete('/labels/:id', { name: 'deleteLabel', preValidation: app.authenticate }, async (req, reply) => {
       const id = Number(req.params.id);
 
       try {
-        const label = await app.objection.models.label.query().findById(id);
+        const label = await app.objection.models.label.query().findById(id).withGraphJoined('[tasks]');
         if (!label) {
           req.flash('error', i18next.t('flash.labels.delete.notFound'));
           reply.redirect(app.reverse('labels'));
           return reply;
         }
 
-        // if (label.tasks.length > 0) {
-        //   req.flash('error', i18next.t('flash.labels.delete.hasTasks'));
-        //   reply.redirect(app.reverse('labels'));
-        //   return reply;
-        // }
+        if (label.tasks.length > 0) {
+          req.flash('error', i18next.t('flash.labels.delete.hasTasks'));
+          reply.redirect(app.reverse('labels'));
+          return reply;
+        }
 
         await label.$query().delete();
         req.flash('info', i18next.t('flash.labels.delete.success'));

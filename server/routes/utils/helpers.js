@@ -1,3 +1,5 @@
+import i18next from "i18next";
+
 export const isAuthenticated = (req, reply) => {
   if (!req.isAuthenticated()) {
     req.flash('error', i18next.t('flash.authError'));
